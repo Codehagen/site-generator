@@ -1,0 +1,96 @@
+{
+  "company": {
+    "name": "Finneid Sveis",
+    "fullName": "Finneid Sveiseverksted AS",
+    "tagline": "Så det holder",
+    "phone": "75 62 00 00",
+    "email": "post@finneidsveis.no",
+    "address": "Finneid, 8220 Fauske"
+  },
+  "branding": {
+    "primaryColor": "#D71921",
+    "accentColor": "#E30613"
+  },
+  "pages": {
+    "home": {
+      "hero": {
+        "title": "Finneid Sveiseverksted AS",
+        "subtitle": "Så det holder. Vi leverer sveising og konstruksjoner av høy kvalitet til avtalt tid og riktig pris.",
+        "primaryCta": "Kontakt oss",
+        "secondaryCta": "Se tjenester"
+      },
+      "stats": [
+        { "value": "40+", "label": "Års erfaring" },
+        { "value": "Nord-Norge", "label": "Ledende aktør" },
+        { "value": "1000+", "label": "Prosjekter levert" },
+        { "value": "Innhuse", "label": "Lakk/malehall" }
+      ],
+      "features": [
+        { "title": "Erfaring", "description": "Ett av Nord-Norges eldste sveiseverksted" },
+        { "title": "Kapasitet", "description": "Stor innendørs produksjonskapasitet" },
+        { "title": "Kvalitet", "description": "Produkter av høy kvalitet" },
+        { "title": "Levering", "description": "Levering til fastsatt tid" },
+        { "title": "Pris", "description": "Riktig pris - hver gang" },
+        { "title": "Lokal", "description": "Lokal tilstedeværelse i Nord-Norge" }
+      ]
+    },
+    "services": {
+      "title": "Våre tjenester",
+      "subtitle": "Totalleverandør av sveising og konstruksjoner",
+      "intro": "Vi tilbyr et bredt spekter av tjenester innen sveising og metallkonstruksjoner. Våre erfarne fagfolk sørger for at ditt prosjekt leveres med høy kvalitet til avtalt tid.",
+      "services": [
+        {
+          "title": "Sveising - Konstruksjoner",
+          "description": "Vi er ledende på store konstruksjoner som broer, industribygg, haller samt bærende konstruksjoner. Med lang erfaring og moderne utstyr leverer vi produkter av høy kvalitet.",
+          "features": ["MAG-sveising", "TIG-sveising", "Plasmaskjæring", "Montering og installasjon"]
+        },
+        {
+          "title": "Industribygg",
+          "description": "Vi leverer komplette industribygg til hele Norge. Fra planlegging til ferdig produkt.",
+          "features": ["Stålkonstruksjoner", "Tak og fasader", "Portaler og rammer", "Tilpassede løsninger"]
+        },
+        {
+          "title": "Hallbygg",
+          "description": "Våre lokaler på Finneid har kapasitet til å bygge de største konstruksjonene innendørs.",
+          "features": ["Store spennvidder", "Kort byggetid", "Fleksibel innredning", "Isolerte løsninger"]
+        },
+        {
+          "title": "Broer",
+          "description": "Vi har erfaring med brokonstruksjoner av alle størrelser.",
+          "features": ["Veibruer", "Gangbruer", "Jernbanebruer", "Modulære løsninger"]
+        },
+        {
+          "title": "Overflatebehandling",
+          "description": "Vi har egen lakk- og malehall for komplett overflatebehandling.",
+          "features": ["Sandblåsing", "Grunning", "Lakkering", "Pulverlakkering"]
+        },
+        {
+          "title": "Bærende konstruksjoner",
+          "description": "Vi produserer og leverer bærende konstruksjoner til alle typer bygg.",
+          "features": ["Søyler og bjelker", "Dragere", "Fagverk", "Kontroll og dokumentasjon"]
+        }
+      ]
+    },
+    "about": {
+      "title": "Om Finneid Sveis",
+      "subtitle": "Ett av Nord-Norges eldste sveiseverksted",
+      "content": "Finneid Sveiseverksted AS ligger på Finneid i Fauske kommune og er et av nordnorges største og eldste firmaer på sveising, konstruksjoner og bygg.\n\nVi er ledende på store konstruksjoner som broer, industribygg, haller samt bærende konstruksjoner. I våre lokaler på Finneid har vi kapasitet til å bygge de største konstruksjonene innendørs samt at vi og kan overflatebehandle i egen lakk/malehall.\n\nVår forretningsfilosofi er til enhver tid å levere produkter:\n• AV HØY KVALITET\n• TIL FASTSATT TID\n• TIL RIKTIG PRIS",
+      "values": [
+        { "title": "Kvalitet", "description": "Vi leverer alltid produkter av høy kvalitet" },
+        { "title": "Pålitelighet", "description": "Vi leverer til avtalt tid - hver gang" },
+        { "title": "Kompetanse", "description": "Bred erfaring og faglig kompetanse" },
+        { "title": "Lokal", "description": "Vi er en lokal aktør i Nord-Norge" }
+      ]
+    },
+    "contact": {
+      "contacts": [
+        { "name": "Heidi Anita Johansen", "role": "Kontormedarbeider" },
+        { "name": "Øyvind Wangberg", "role": "Prosjektleder" },
+        { "name": "Tor-Arne Berg", "role": "Produksjonsleder" },
+        { "name": "Stig Olsen", "role": "Prosjektleder" },
+        { "name": "Erik Hugås", "role": "Konstruktør/Tegner" },
+        { "name": "Tor-Einar Vatnan", "role": "Ingeniør/Prosjektleder" }
+      ]
+    }
+  }
+}

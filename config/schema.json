@@ -1,0 +1,132 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codenord.no/schemas/site-config.json",
+  "title": "Site Config",
+  "description": "Configuration for generating a business landing page",
+  "type": "object",
+  "required": ["company", "branding", "pages"],
+  "properties": {
+    "company": {
+      "type": "object",
+      "required": ["name", "phone", "email", "address"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "fullName": { "type": "string" },
+        "tagline": { "type": "string" },
+        "phone": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "address": { "type": "string" },
+        "orgNumber": { "type": "string" }
+      }
+    },
+    "branding": {
+      "type": "object",
+      "required": ["primaryColor"],
+      "properties": {
+        "primaryColor": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$" },
+        "accentColor": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$" },
+        "font": { "type": "string", "enum": ["default", "serif", "mono"] }
+      }
+    },
+    "pages": {
+      "type": "object",
+      "properties": {
+        "home": {
+          "type": "object",
+          "properties": {
+            "hero": {
+              "type": "object",
+              "properties": {
+                "title": { "type": "string" },
+                "subtitle": { "type": "string" },
+                "primaryCta": { "type": "string" },
+                "secondaryCta": { "type": "string" }
+              }
+            },
+            "stats": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "value": { "type": "string" },
+                  "label": { "type": "string" }
+                },
+                "required": ["value", "label"]
+              }
+            },
+            "features": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "title": { "type": "string" },
+                  "description": { "type": "string" }
+                },
+                "required": ["title", "description"]
+              }
+            }
+          }
+        },
+        "services": {
+          "type": "object",
+          "properties": {
+            "title": { "type": "string" },
+            "subtitle": { "type": "string" },
+            "intro": { "type": "string" },
+            "services": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["title", "description"],
+                "properties": {
+                  "title": { "type": "string" },
+                  "description": { "type": "string" },
+                  "features": {
+                    "type": "array",
+                    "items": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "about": {
+          "type": "object",
+          "properties": {
+            "title": { "type": "string" },
+            "subtitle": { "type": "string" },
+            "content": { "type": "string" },
+            "values": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "title": { "type": "string" },
+                  "description": { "type": "string" }
+                },
+                "required": ["title", "description"]
+              }
+            }
+          }
+        },
+        "contact": {
+          "type": "object",
+          "properties": {
+            "contacts": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "role": { "type": "string" },
+                  "email": { "type": "string" },
+                  "phone": { "type": "string" }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
