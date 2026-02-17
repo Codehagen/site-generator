@@ -421,10 +421,9 @@ export default function Page() {
       }}
     >
       <AboutPage 
-        title="${about.title || 'Om oss'}"
-        subtitle="${about.subtitle || ''}"
+        companyName="${company.name}"
         content={\`${(about.content || '').replace(/`/g, '\\`')}\`}
-        values={${JSON.stringify((about.values || []).map(v => ({ title: v.title, description: v.description })), null, 2)}}
+        values={${JSON.stringify((about.values || []).map(v => v.title))}}
         primaryColor={PRIMARY_COLOR}
       />
     </Layout>
