@@ -421,6 +421,8 @@ export default function Page() {
       }}
     >
       <AboutPage 
+        title="${about.title || 'Om oss'}"
+        subtitle="${about.subtitle || ''}"
         companyName="${company.name}"
         content={\`${(about.content || '').replace(/`/g, '\\`')}\`}
         values={${JSON.stringify((about.values || []).map(v => v.title))}}
@@ -479,6 +481,8 @@ export default function Page() {
       }}
     >
       <ContactPage 
+        title="Kontakt oss"
+        subtitle="Ta gjerne kontakt med oss"
         companyName="${company.name}"
         contact={{
           phone: "${company.phone}",
