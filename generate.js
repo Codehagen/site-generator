@@ -1,17 +1,14 @@
 #!/usr/bin/env node
 /**
- * Site Generator - Config-driven
+ * Site Generator - Config-driven (FIXED VERSION)
  * 
  * Usage: node generate.js <config-file> [output-dir]
- * 
- * Reads a JSON config, validates it, and generates a Next.js site.
  */
 
 const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 
-// Colors for console output
 const colors = {
   green: '\x1b[32m',
   red: '\x1b[31m',
@@ -29,7 +26,6 @@ function error(msg) {
   process.exit(1);
 }
 
-// Load and validate config
 function loadConfig(configPath) {
   if (!fs.existsSync(configPath)) {
     error(`Config file not found: ${configPath}`);
@@ -37,26 +33,20 @@ function loadConfig(configPath) {
   
   const config = JSON.parse(fs.readFileSync(configPath, 'utf-8'));
   
-  // Basic validation
-  if (!config.company) error('Missing required field: company');
-  if (!config.company.name) error('Missing required field: company.name');
-  if (!config.branding) error('Missing required field: branding');
-  if (!config.branding.primaryColor) error('Missing required field: branding.primaryColor');
+  if (!config.company) error('Missing: company');
+  if (!config.company.name) error('Missing: company.name');
+  if (!config.branding) error('Missing: branding');
+  if (!config.branding.primaryColor) error('Missing: branding.primaryColor');
   
-  // Validate color format
   const colorRegex = /^#[0-9A-Fa-f]{6}$/;
   if (!colorRegex.test(config.branding.primaryColor)) {
     error('Invalid primaryColor format. Use #RRGGBB');
   }
-  if (config.branding.accentColor && !colorRegex.test(config.branding.accentColor)) {
-    error('Invalid accentColor format. Use #RRGGBB');
-  }
   
-  log('✅ Config validated successfully', 'green');
+  log('✅ Config validated', 'green');
   return config;
 }
 
-// Generate globals.css with brand colors
 function generateCSS(config) {
   const primary = config.branding.primaryColor;
   const accent = config.branding.accentColor || primary;
@@ -123,7 +113,6 @@ function generateCSS(config) {
   }
 }
 
-/* Animations */
 @keyframes hero-fade-up {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
@@ -152,24 +141,18 @@ function generateCSS(config) {
 `;
 }
 
-// Generate home page
 function generateHomePage(config) {
   const { company, branding, pages } = config;
-  const p = pages.home || {};
-  const hero = p.hero || {};
-  const stats = p.stats || [];
-  const features = p.features || [];
-  const servicesList = (pages.services?.services || []).slice(0, 6).map(s => ({
+  const hero = pages.home?.hero || {};
+  const stats = pages.home?.stats || [];
+  const features = pages.home?.features || [];
+  const services = (pages.services?.services || []).slice(0, 6).map(s => ({
     title: s.title,
     description: s.description
   }));
   
-  const hasStats = stats.length > 0;
-  const hasServices = servicesList.length > 0;
-  const hasAbout = !!pages.about;
-  const hasFeatures = features.length > 0;
-  
-  const statsSection = hasStats ? `<section className="py-16 bg-white">
+  const statsSection = stats.length > 0 ? `
+      <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             ${stats.map(s => `<div>
@@ -180,41 +163,9 @@ function generateHomePage(config) {
         </div>
       </section>` : '';
 
-  const servicesSection = hasServices ? `<Services
-        title="${pages.services?.title || 'Våre tjenester'}"
-        subtitle="${pages.services?.subtitle || ''}"
-        services={servicesList}
-        primaryColor={PRIMARY_COLOR}
-      />` : '';
-
-  const aboutSection = hasAbout ? `<About
-        title="${pages.about.title || 'Om oss'}"
-        content="${pages.about.content || ''}"
-        points={${JSON.stringify((pages.about.values || []).map(v => v.title))}}
-        imageUrl=""
-        primaryColor={PRIMARY_COLOR}
-      />` : '';
-
-  const featuresSection = hasFeatures ? `<Features
-        title="Hvorfor velge oss?"
-        features={${JSON.stringify(features, null, 2)}}
-        primaryColor={PRIMARY_COLOR}
-      />` : '';
-
   return `"use client";
 
-import { 
-  Hero, 
-  Services, 
-  About, 
-  Contact, 
-  Footer, 
-  Header,
-  CTASection,
-  Features,
-  Process,
-  Layout
-} from "@/components";
+import { Hero, Services, About, Contact, Footer, Header, CTASection, Features, Process, Layout } from "@/components";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Menu, X } from "lucide-react";
@@ -232,12 +183,12 @@ const NAV_LINKS = [
 export default function Home() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const services = ${JSON.stringify(servicesList, null, 2)};
+  const services = ${JSON.stringify(services, null, 2)};
 
   const processSteps = [
     { title: "Kontakt oss", description: "Ta kontakt for en uforpliktende samtale" },
     { title: "Befaring", description: "Vi befarer prosjektet og gir tilbud" },
-    { title: "Produksjon", description: "Vi produserer konstruksjonene" },
+    { title: "Produksjon", description: "Vi setter løsningen i drift" },
     { title: "Levering", description: "Vi leverer til avtalt tid" }
   ];
 
@@ -253,7 +204,7 @@ export default function Home() {
       }}
       footerProps={{
         companyName: "${company.fullName || company.name}",
-        description: "${company.tagline || 'Kvalitet til avtalt tid'}",
+        description: "${company.tagline || ''}",
         contact: {
           phone: "${company.phone}",
           email: "${company.email}",
@@ -261,14 +212,11 @@ export default function Home() {
         },
         primaryColor: PRIMARY_COLOR,
         columns: [
-          {
-            title: "Tjenester",
-            links: [
-              { label: "Tjenester", href: "/tjenester" },
-              { label: "Om oss", href: "/om-oss" },
-              { label: "Kontakt", href: "/kontakt" }
-            ]
-          }
+          { title: "Tjenester", links: [
+            { label: "Tjenester", href: "/tjenester" },
+            { label: "Om oss", href: "/om-oss" },
+            { label: "Kontakt", href: "/kontakt" }
+          ]}
         ]
       }}
     >
@@ -285,15 +233,33 @@ export default function Home() {
 
       ${statsSection}
 
-      ${servicesSection}
+      ${services.length > 0 ? `
+      <Services
+        title="${pages.services?.title || 'Våre tjenester'}"
+        subtitle="${pages.services?.subtitle || ''}"
+        services={services}
+        primaryColor={PRIMARY_COLOR}
+      />` : ''}
 
-      ${aboutSection}
+      ${pages.about ? `
+      <About
+        title="${pages.about.title || 'Om oss'}"
+        content="${(pages.about.content || '').substring(0, 200)}"
+        points={${JSON.stringify((pages.about.values || []).map(v => v.title))}}
+        imageUrl=""
+        primaryColor={PRIMARY_COLOR}
+      />` : ''}
 
-      ${featuresSection}
+      ${features.length > 0 ? `
+      <Features
+        title="Hvorfor velge oss?"
+        features={${JSON.stringify(features, null, 2)}}
+        primaryColor={PRIMARY_COLOR}
+      />` : ''}
 
       <CTASection
         title="Trenger du våre tjenester?"
-        description="Ta kontakt med oss for en uforpliktende samtale om ditt prosjekt."
+        description="Ta kontakt med oss for en uforpliktende samtale."
         ctaText="Kontakt oss"
         ctaHref="/kontakt"
         primaryColor={PRIMARY_COLOR}
@@ -315,7 +281,6 @@ export default function Home() {
 `;
 }
 
-// Generate services page
 function generateServicesPage(config) {
   const { company, branding, pages } = config;
   const services = pages.services?.services || [];
@@ -350,14 +315,11 @@ export default function Page() {
         },
         primaryColor: PRIMARY_COLOR,
         columns: [
-          {
-            title: "Tjenester",
-            links: [
-              { label: "Tjenester", href: "/tjenester" },
-              { label: "Om oss", href: "/om-oss" },
-              { label: "Kontakt", href: "/kontakt" }
-            ]
-          }
+          { title: "Tjenester", links: [
+            { label: "Tjenester", href: "/tjenester" },
+            { label: "Om oss", href: "/om-oss" },
+            { label: "Kontakt", href: "/kontakt" }
+          ]}
         ]
       }}
     >
@@ -374,7 +336,6 @@ export default function Page() {
 `;
 }
 
-// Generate about page
 function generateAboutPage(config) {
   const { company, branding, pages } = config;
   const about = pages.about || {};
@@ -409,21 +370,17 @@ export default function Page() {
         },
         primaryColor: PRIMARY_COLOR,
         columns: [
-          {
-            title: "Tjenester",
-            links: [
-              { label: "Tjenester", href: "/tjenester" },
-              { label: "Om oss", href: "/om-oss" },
-              { label: "Kontakt", href: "/kontakt" }
-            ]
-          }
+          { title: "Tjenester", links: [
+            { label: "Tjenester", href: "/tjenester" },
+            { label: "Om oss", href: "/om-oss" },
+            { label: "Kontakt", href: "/kontakt" }
+          ]}
         ]
       }}
     >
       <AboutPage 
         title="${about.title || 'Om oss'}"
         subtitle="${about.subtitle || ''}"
-        companyName="${company.name}"
         content={\`${(about.content || '').replace(/`/g, '\\`')}\`}
         values={${JSON.stringify((about.values || []).map(v => v.title))}}
         primaryColor={PRIMARY_COLOR}
@@ -434,10 +391,8 @@ export default function Page() {
 `;
 }
 
-// Generate contact page
 function generateContactPage(config) {
-  const { company, branding, pages } = config;
-  const contacts = pages.contact?.contacts || [];
+  const { company, branding } = config;
   
   return `import { ContactPage, Layout } from "@/components";
 
@@ -469,20 +424,15 @@ export default function Page() {
         },
         primaryColor: PRIMARY_COLOR,
         columns: [
-          {
-            title: "Tjenester",
-            links: [
-              { label: "Tjenester", href: "/tjenester" },
-              { label: "Om oss", href: "/om-oss" },
-              { label: "Kontakt", href: "/kontakt" }
-            ]
-          }
+          { title: "Tjenester", links: [
+            { label: "Tjenester", href: "/tjenester" },
+            { label: "Om oss", href: "/om-oss" },
+            { label: "Kontakt", href: "/kontakt" }
+          ]}
         ]
       }}
     >
       <ContactPage 
-        title="Kontakt oss"
-        subtitle="Ta gjerne kontakt med oss"
         companyName="${company.name}"
         contact={{
           phone: "${company.phone}",
@@ -497,35 +447,30 @@ export default function Page() {
 `;
 }
 
-// Main generator
 function generate(configPath, outputDir) {
   const config = loadConfig(configPath);
-  const companyName = config.company.name.toLowerCase().replace(/[^a-z0-9]/g, '-');
-  const output = outputDir || path.join(__dirname, '..', '..', companyName);
+  const companySlug = config.company.name.toLowerCase().replace(/[^a-z0-9]/g, '-');
+  const output = outputDir || path.join(__dirname, '..', companySlug);
   
-  log(`\n${colors.blue}🏗️  Generating site for: ${config.company.name}${colors.reset}\n`);
+  log(`\n${colors.blue}🏗️  Generating: ${config.company.name}${colors.reset}\n`);
   
-  // Create output directory
   if (!fs.existsSync(output)) {
     fs.mkdirSync(output, { recursive: true });
-    log(`Created directory: ${output}`, 'yellow');
   }
   
-  // Copy template files (from kjeldsberg-ef)
+  // Copy from kjeldsberg-ef template
   const templateDir = path.join(__dirname, '..', 'kjeldsberg-ef');
   
   if (fs.existsSync(templateDir)) {
     log('Copying template files...', 'yellow');
     execSync(`cp -r "${templateDir}/." "${output}/"`, { stdio: 'pipe' });
   } else {
-    error(`Template directory not found: ${templateDir}`);
+    error(`Template not found: ${templateDir}`);
   }
   
-  // Generate CSS
-  log('Generating globals.css...', 'yellow');
+  log('Generating CSS...', 'yellow');
   fs.writeFileSync(path.join(output, 'src/app/globals.css'), generateCSS(config));
   
-  // Generate pages
   log('Generating pages...', 'yellow');
   fs.writeFileSync(path.join(output, 'src/app/page.tsx'), generateHomePage(config));
   fs.writeFileSync(path.join(output, 'src/app/tjenester/page.tsx'), generateServicesPage(config));
@@ -533,18 +478,13 @@ function generate(configPath, outputDir) {
   fs.writeFileSync(path.join(output, 'src/app/kontakt/page.tsx'), generateContactPage(config));
   
   // Update package.json
-  const packageJson = JSON.parse(fs.readFileSync(path.join(output, 'package.json'), 'utf-8'));
-  packageJson.name = companyName;
-  fs.writeFileSync(path.join(output, 'package.json'), JSON.stringify(packageJson, null, 2));
+  const pkg = JSON.parse(fs.readFileSync(path.join(output, 'package.json'), 'utf-8'));
+  pkg.name = companySlug;
+  fs.writeFileSync(path.join(output, 'package.json'), JSON.stringify(pkg, null, 2));
   
-  log(`\n✅ Site generated in: ${output}`, 'green');
-  log(`\nNext steps:`, 'blue');
-  log(`  cd ${output}`, 'reset');
-  log(`  npm run dev  # Test locally`, 'reset');
-  log(`  git add . && git commit -m "Generated from config"`, 'reset');
+  log(`\n✅ Site generated: ${output}`, 'green');
 }
 
-// Run
 const args = process.argv.slice(2);
 if (args.length === 0) {
   console.log('Usage: node generate.js <config-file> [output-dir]');
